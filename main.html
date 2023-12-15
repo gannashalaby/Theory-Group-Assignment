@@ -1,3 +1,9 @@
+<!-- NOTE:
+    To Husam and Lee, I have put comments in the specific HTML code parts
+    that you need to change, but it is flexible if you have needed to
+    change another parts -->
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,7 +41,10 @@
             border-right: 1px solid blue;
         }
         
-        #homeFields {
+        #homeFields,
+        #RGtoNFAfields,
+        #NFAtoRGfields,
+        #HelpandDocFields {
             display: flex;
             flex-direction: column;
             border: 1px solid grey;
@@ -43,7 +52,6 @@
             min-height: calc(100vh - 60px);
             text-align: center;
             align-items: center;
-            /* font-weight: bold; */
         }
         
         @media (min-width: 937.6px) {
@@ -52,9 +60,9 @@
             }
         }
         
-        @media (max-width: 592px) {
+        @media (max-width: 980px) {
             body {
-                width: 576px;
+                width: 964px;
             }
         }
         
@@ -98,14 +106,118 @@
             border-radius: 50%;
         }
         
-        .checkButton {
-            width: 80px;
+        .checkButton,
+        .convertButton,
+        .toNFAbutton,
+        .drawNFAbutton {
+            height: 30px;
             padding: 7px;
             font-weight: bold;
             color: white;
             background-color: DodgerBlue;
             border: none;
             border-radius: 5px;
+        }
+        
+        .checkButton {
+            width: 80px;
+        }
+        
+        .convertButton {
+            width: 160px;
+        }
+        
+        .toNFAbutton {
+            width: 130px;
+        }
+        
+        .drawNFAbutton {
+            width: 95px;
+        }
+        
+        .RGtoNFAinput,
+        .RGtoNFAoutput,
+        .NFAtoRGinput,
+        .NFAtoRGoutput,
+        .NFAdraw {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .NFAtoRGoutput {
+            width: 100%;
+            height: 260px;
+        }
+        
+        .NFAoutput {
+            width: 260px;
+        }
+        
+        .NFAdraw {
+            margin: 70px;
+            padding: 16px;
+            border: 1px solid DodgerBlue;
+        }
+        
+        .RGinput,
+        .RGformalDefinition,
+        .RGtransitionTable,
+        .NFAinput,
+        .NFAtransitionTable,
+        .NFAdrawig {
+            min-width: 260px;
+            min-height: 260px;
+        }
+        
+        .RGinput {
+            text-align: center;
+        }
+        
+        .inputspace,
+        .outputspace,
+        .inputNFA,
+        .NFAdrawTable {
+            min-width: 200px;
+            min-height: 200px;
+        }
+        
+        .inputNFA,
+        .NFAdrawTable {
+            background-color: grey;
+            /* You will remove the background color. It is here just for clarity */
+        }
+        
+        .inputspace,
+        .outputspace {
+            border-width: 5px;
+            border-style: double;
+            border-color: #bbbbbb;
+            border-radius: 5px;
+        }
+        
+        .RGformalDefinition {
+            background-color: grey;
+            /* You will remove the background color. It is here just for clarity */
+        }
+        
+        .NFAdrawig {
+            background-color: grey;
+            /* You will remove the background color. It is here just for clarity */
+        }
+        
+        .RGtransitionTable p {
+            margin-top: 0;
+        }
+        
+        .RGdrawTable {
+            height: 225.6px;
+            background-color: grey;
+            /* You will remove the background color. It is here just for clarity */
+        }
+        
+        .convertSeparator {
+            margin: 70px;
         }
     </style>
 </head>
@@ -181,18 +293,112 @@
         </div>
 
         <div id="RGtoNFAfields" style="display: none;">
-            <button type="submit" class="checkButton">Check</button>
+            <div class="RGtoNFAinput">
+                <div class="RGinput">
+                    <p>Regular Grammars (input)</p>
+                    <div class="inputspace">
+                        <!-- To Husam: you can write your code here!
+                            NOTE: you can edit on the style and the script too. -->
+                    </div>
+                </div>
+                <button type="submit" class="checkButton">Check</button>
+                <div class="RGinput">
+                    <p>Check strings (input)</p>
+                    <div class="inputspace">
+                        <!-- To Husam: you can write your code here!
+                            NOTE: you can edit on the style and the script too. -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="convertSeparator">
+                <button type="submit" class="convertButton">Convert RG into NFA</button>
+            </div>
+
+            <div class="RGtoNFAoutput">
+                <div class="RGformalDefinition">
+                    <!-- To Husam: you can write your code here!
+                         NOTE: you can edit on the style and the script too. -->
+                </div>
+                <div class="RGtransitionTable">
+                    <p>Transition Table</p>
+                    <div class="RGdrawTable">
+                        <!-- To Husam: you can write your code here!
+                            NOTE: you can edit on the style and the script too. -->
+                    </div>
+                </div>
+                <button type="submit" class="toNFAbutton">To NFA without &epsilon;</button>
+                <div class="RGtransitionTable">
+                    <p>Transition Table W/O &epsilon;</p>
+                    <div class="RGdrawTable">
+                        <!-- To Husam: you can write your code here!
+                            NOTE: you can edit on the style and the script too. -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="NFAdraw">
+                <button type="submit" class="drawNFAbutton">Draw NFA</button>
+                <div class="NFAdrawig">
+                    <!-- To Husam: you can write your code here!
+                        NOTE: you can edit on the style and the script too. -->
+                </div>
+            </div>
         </div>
 
         <div id="NFAtoRGfields" style="display: none;">
-            <button type="submit" class="checkButton">Check</button>
+            <div class="NFAtoRGinput">
+                <div class="NFAinput">
+                    <P>NFA (input)</P>
+                    <div class="inputNFA">
+                        <!-- To Lee: you can write your code here!
+                            NOTE: you can edit on the style and the script too. -->
+                    </div>
+                </div>
+                <div class="NFAtransitionTable">
+                    <p>Transition Table</p>
+                    <div class="NFAdrawTable">
+                        <!-- To Lee: you can write your code here!
+                            NOTE: you can edit on the style and the script too. -->
+                    </div>
+                </div>
+                <button type="submit" class="checkButton">Check</button>
+                <div class="NFAinput">
+                    <p>Check strings (input)</p>
+                    <div class="outputspace">
+                        <!-- To Lee: you can write your code here!
+                            NOTE: you can edit on the style and the script too. -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="convertSeparator">
+                <button type="submit" class="convertButton">Convert RG into NFA</button>
+            </div>
+
+            <div class="NFAtoRGoutput">
+                <div class="NFAoutput">
+                    <p>Regular Grammars</p>
+                    <div class="outputspace">
+                        <!-- To Lee: you can write your code here!
+                                NOTE: you can edit on the style and the script too. -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="NFAdraw">
+                <button type="submit" class="drawNFAbutton">Draw NFA</button>
+                <div class="NFAdrawig">
+                    <!-- To Lee: you can write your code here!
+                        NOTE: you can edit on the style and the script too. -->
+                </div>
+            </div>
         </div>
 
         <div id="HelpandDocFields" style="display: none;">
-            <p>How it works? Let's See!</p>
+            <p>How it works?
+                <br><br>To be Continued....</p>
         </div>
-    </div>
-
     </div>
 
     <script>
