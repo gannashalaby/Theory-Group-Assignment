@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RG-NFA</title>
+    <style>
+        .nav-tab {
+            display: flex;
+        }
+        
+        .nav-button,
+        .nav-button:not(.clicked) {
+            width: 100px;
+            padding: 10px;
+            font-weight: bold;
+            color: grey;
+            background-color: darkgray;
+            border: 1px solid blue;
+            border-radius: 7px;
+            border-bottom: none;
+            border-right: none;
+        }
+        
+        .nav-button:hover {
+            background-color: lightgray;
+        }
+        
+        .nav-button.clicked {
+            background-color: white;
+        }
+        
+        .nav-button-last {
+            border-right: 1px solid blue;
+        }
+        
+        #homeFields {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid grey;
+            width: 100%;
+            min-height: calc(100vh - 60px);
+            text-align: center;
+            align-items: center;
+            /* font-weight: bold; */
+        }
+        
+        @media (min-width: 937.6px) {
+            #homeFields table {
+                width: 875.5px;
+            }
+        }
+        
+        @media (max-width: 592px) {
+            body {
+                width: 576px;
+            }
+        }
+        
+        #homeFields table {
+            /* font-family: arial, sans-serif; */
+            border-collapse: collapse;
+            width: 95%;
+        }
+        
+        #homeFields th {
+            border: 1px solid #bbbbbb;
+            text-align: center;
+            padding: 8px;
+        }
+        
+        #homeFields td {
+            border: 1px solid #bbbbbb;
+            text-align: left;
+            padding: 8px;
+        }
+        
+        #homeFields td:first-child {
+            text-align: center;
+        }
+        
+        #homeFields td:nth-child(2) {
+            width: 30%;
+        }
+        
+        #homeFields td:nth-child(3) {
+            width: 15%;
+        }
+        
+        #homeFields td:last-child {
+            width: 45%;
+        }
+        
+        #homeFields td img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        .checkButton {
+            width: 80px;
+            padding: 7px;
+            font-weight: bold;
+            color: white;
+            background-color: DodgerBlue;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav-tab" id="desiredActionFields">
+        <button type="submit" name="homeButton" class="nav-button">Home</button>
+        <button type="submit" name="RGtoNFAbutton" class="nav-button">RG &rarr; NFA</button>
+        <button type="submit" name="NFAtoRGbutton" class="nav-button">NFA &rarr; RG</button>
+        <button type="submit" name="HelpandDocButton" class="nav-button nav-button-last">Help &plus; Doc</button>
+    </div>
+    <div class="body-content">
+        <div id="homeFields">
+            <h3>TIC2151 Theory of Computation</h3>
+            <table>
+                <tr>
+                    <th>Student Photo</th>
+                    <th>Student Name</th>
+                    <th>Student ID</th>
+                    <th>Student Participation</th>
+                </tr>
+                <tr>
+                    <td><img src=".\assets\images\Ganna.jpg" alt="Ganna's Photo"></td>
+                    <td>SHALABY, GANNA MOHAMED ABDELWAHAB TONY</td>
+                    <td>1201302564</td>
+                    <td><strong>Group Leader</strong>
+                        <br>
+                        <ol>
+                            <li>Code Designing</li>
+                            <li>RG to NFA & NFA to RG functionalities assistant</li>
+                            <li>Documentation Responsible</li>
+                            <li>Presentation Slides</li>
+                        </ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td><img src=".\assets\images\Amine.jpg" alt="Amine's Photo"></td>
+                    <td>AMINE DJEHLANE</td>
+                    <td>1191302780</td>
+                    <td><strong>Group Member</strong>
+                        <br>
+                        <ol>
+                            <li>Flowcharts</li>
+                            <li>Documentation</li>
+                        </ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td><img src=".\assets\images\Husam.jpg" alt="Husam's Photo"></td>
+                    <td>HUSAM WADEEA RASHED MOHAMMED</td>
+                    <td>1201302563</td>
+                    <td><strong>Group Member</strong>
+                        <br>
+                        <ol>
+                            <li>RG to NFA functionality</li>
+                            <li>Documentation</li>
+                        </ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td><img src=".\assets\images\Lee.jpg" alt="Lee's Photo"></td>
+                    <td>LEE JIA XUAN</td>
+                    <td>1201100243</td>
+                    <td><strong>Group Member</strong>
+                        <br>
+                        <ol>
+                            <li>NFA to RG functionality</li>
+                            <li>Documentation</li>
+                        </ol>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="RGtoNFAfields" style="display: none;">
+            <button type="submit" class="checkButton">Check</button>
+        </div>
+
+        <div id="NFAtoRGfields" style="display: none;">
+            <button type="submit" class="checkButton">Check</button>
+        </div>
+
+        <div id="HelpandDocFields" style="display: none;">
+            <p>How it works? Let's See!</p>
+        </div>
+    </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const desiredActionFields = document.getElementById("desiredActionFields");
+
+            const homeButton = document.querySelector('button[name="homeButton"]');
+            const homeFields = document.getElementById("homeFields");
+
+            const RGtoNFAbutton = document.querySelector('button[name="RGtoNFAbutton"]');
+            const RGtoNFAfields = document.getElementById("RGtoNFAfields");
+
+            const NFAtoRGbutton = document.querySelector('button[name="NFAtoRGbutton"]');
+            const NFAtoRGfields = document.getElementById("NFAtoRGfields");
+
+            const HelpandDocButton = document.querySelector('button[name="HelpandDocButton"]');
+            const HelpandDocFields = document.getElementById("HelpandDocFields");
+
+            homeButton.classList.add("clicked");
+
+            homeButton.addEventListener("click", function(event) {
+                event.preventDefault();
+                this.classList.add("clicked");
+                RGtoNFAbutton.classList.remove("clicked");
+                NFAtoRGbutton.classList.remove("clicked");
+                HelpandDocButton.classList.remove("clicked");
+                homeFields.style.display = "block";
+                RGtoNFAfields.style.display = "none";
+                NFAtoRGfields.style.display = "none";
+                HelpandDocFields.style.display = "none";
+            });
+
+            RGtoNFAbutton.addEventListener("click", function(event) {
+                event.preventDefault();
+                this.classList.add("clicked");
+                homeButton.classList.remove("clicked");
+                NFAtoRGbutton.classList.remove("clicked");
+                HelpandDocButton.classList.remove("clicked");
+                RGtoNFAfields.style.display = "block";
+                homeFields.style.display = "none";
+                NFAtoRGfields.style.display = "none";
+                HelpandDocFields.style.display = "none";
+            });
+
+            NFAtoRGbutton.addEventListener("click", function(event) {
+                event.preventDefault();
+                this.classList.add("clicked");
+                homeButton.classList.remove("clicked");
+                RGtoNFAbutton.classList.remove("clicked");
+                HelpandDocButton.classList.remove("clicked");
+                NFAtoRGfields.style.display = "block";
+                homeFields.style.display = "none";
+                RGtoNFAfields.style.display = "none";
+                HelpandDocFields.style.display = "none";
+            });
+
+            HelpandDocButton.addEventListener("click", function(event) {
+                event.preventDefault();
+                this.classList.add("clicked");
+                homeButton.classList.remove("clicked");
+                NFAtoRGbutton.classList.remove("clicked");
+                RGtoNFAbutton.classList.remove("clicked");
+                HelpandDocFields.style.display = "block";
+                homeFields.style.display = "none";
+                RGtoNFAfields.style.display = "none";
+                NFAtoRGfields.style.display = "none";
+            });
+        });
+    </script>
+
+</body>
+
+</html>
