@@ -1,0 +1,852 @@
+<!-- NOTE:
+    To Husam and Lee, I have put comments in the specific HTML code parts
+    that you need to change, but it is flexible if you have needed to
+    change another parts -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RG-NFA</title>
+    <style>
+        .inputNFATable{
+            border-collapse: collapse; 
+            border:1px solid;
+            width:100%;
+        }
+
+        .inputNFATable td, .inputNFATable th {
+            border: 1px solid black;
+            position: relative;
+            text-align:center;
+        }
+
+        .inputNFATB {
+            border: none;
+            width:50px;
+            outline: none;
+        }
+        .nav-tab {
+            display: flex;
+        }
+        
+        .nav-button,
+        .nav-button:not(.clicked) {
+            width: 100px;
+            padding: 10px;
+            font-weight: bold;
+            color: grey;
+            background-color: darkgray;
+            border: 1px solid blue;
+            border-radius: 7px;
+            border-bottom: none;
+            border-right: none;
+        }
+        
+        .nav-button:hover {
+            background-color: lightgray;
+        }
+        
+        .nav-button.clicked {
+            background-color: white;
+        }
+        
+        .nav-button-last {
+            border-right: 1px solid blue;
+        }
+        
+        #homeFields,
+        #RGtoNFAfields,
+        #NFAtoRGfields,
+        #HelpandDocFields {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid grey;
+            width: 100%;
+            min-height: calc(100vh - 60px);
+            text-align: center;
+            align-items: center;
+        }
+        
+        @media (min-width: 937.6px) {
+            #homeFields table {
+                width: 875.5px;
+            }
+        }
+        
+        @media (max-width: 980px) {
+            body {
+                width: 964px;
+            }
+        }
+        
+        #homeFields table {
+            border-collapse: collapse;
+            width: 95%;
+        }
+        
+        #homeFields th {
+            border: 1px solid #bbbbbb;
+            text-align: center;
+            padding: 8px;
+        }
+        
+        #homeFields td {
+            border: 1px solid #bbbbbb;
+            text-align: left;
+            padding: 8px;
+        }
+        
+        #homeFields td:first-child {
+            text-align: center;
+        }
+        
+        #homeFields td:nth-child(2) {
+            width: 30%;
+        }
+        
+        #homeFields td:nth-child(3) {
+            width: 15%;
+        }
+        
+        #homeFields td:last-child {
+            width: 45%;
+        }
+        
+        #homeFields td img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        .checkButton,
+        .convertButton,
+        .toNFAbutton,
+        .drawNFAbutton {
+            height: 30px;
+            padding: 7px;
+            font-weight: bold;
+            color: white;
+            background-color: DodgerBlue;
+            border: none;
+            border-radius: 5px;
+        }
+        
+        .checkButton {
+            width: 80px;
+        }
+        
+        .convertButton {
+            width: 160px;
+        }
+        
+        .toNFAbutton {
+            width: 130px;
+        }
+        
+        .drawNFAbutton {
+            width: 95px;
+        }
+        
+        .RGtoNFAinput,
+        .RGtoNFAoutput,
+        .NFAtoRGinput,
+        .NFAtoRGoutput,
+        .NFAdraw {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .NFAtoRGoutput {
+            width: 100%;
+            height: 260px;
+        }
+        
+        .NFAoutput {
+            width: 260px;
+        }
+        
+        .NFAdraw {
+            margin: 70px;
+            padding: 16px;
+            border: 1px solid DodgerBlue;
+        }
+        
+        .RGinput,
+        .RGformalDefinition,
+        .RGtransitionTable,
+        .NFAinput,
+        .NFAtransitionTable,
+        .NFAdrawig {
+            min-width: 260px;
+            min-height: 260px;
+        }
+        
+        .RGinput {
+            text-align: center;
+        }
+        
+        .inputspace,
+        .outputspaceTransitionTable,
+        .outputspaceRGConvert,
+        .inputNFA,
+        .NFAdrawTable {
+            min-width: 200px;
+            min-height: 200px;
+        }
+        
+		.outputspaceRGConvert{
+			 white-space:pre-wrap !important;
+			 text-align: left !important;
+		}
+		
+        /*.inputNFA,
+        .NFAdrawTable {
+            background-color: grey;
+             You will remove the background color. It is here just for clarity 
+        } */
+        
+        .inputspace,
+        .outputspaceTransitionTable {
+            border-width: 5px;
+            border-style: double;
+            border-color: #bbbbbb;
+            border-radius: 5px;
+        }
+        
+        .outputspaceRGConvert {
+            border-width: 5px;
+            border-style: double;
+            border-color: #bbbbbb;
+            border-radius: 5px;
+        }
+
+        .RGformalDefinition {
+            background-color: grey;
+            /* You will remove the background color. It is here just for clarity */
+        }
+        
+        .NFAdrawig {
+            background-color: grey;
+            /* You will remove the background color. It is here just for clarity */
+        }
+        
+        .RGtransitionTable p {
+            margin-top: 0;
+        }
+        
+        .RGdrawTable {
+            height: 225.6px;
+            background-color: grey;
+            /* You will remove the background color. It is here just for clarity */
+        }
+        
+        .convertSeparator {
+            margin: 70px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav-tab" id="desiredActionFields">
+        <button type="submit" name="homeButton" class="nav-button">Home</button>
+        <button type="submit" name="RGtoNFAbutton" class="nav-button">RG &rarr; NFA</button>
+        <button type="submit" name="NFAtoRGbutton" class="nav-button">NFA &rarr; RG</button>
+        <button type="submit" name="HelpandDocButton" class="nav-button nav-button-last">Help &plus; Doc</button>
+    </div>
+    <div class="body-content">
+        <div id="homeFields">
+            <h3>TIC2151 Theory of Computation</h3>
+            <table>
+                <tr>
+                    <th>Student Photo</th>
+                    <th>Student Name</th>
+                    <th>Student ID</th>
+                    <th>Student Participation</th>
+                </tr>
+                <tr>
+                    <td><img src=".\assets\images\Ganna.jpg" alt="Ganna's Photo"></td>
+                    <td>SHALABY, GANNA MOHAMED ABDELWAHAB TONY</td>
+                    <td>1201302564</td>
+                    <td><strong>Group Leader</strong>
+                        <br>
+                        <ol>
+                            <li>Code Designing</li>
+                            <li>RG to NFA & NFA to RG functionalities assistant</li>
+                            <li>Documentation Responsible</li>
+                            <li>Presentation Slides</li>
+                        </ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td><img src=".\assets\images\Amine.jpg" alt="Amine's Photo"></td>
+                    <td>AMINE DJEHLANE</td>
+                    <td>1191302780</td>
+                    <td><strong>Group Member</strong>
+                        <br>
+                        <ol>
+                            <li>Flowcharts</li>
+                            <li>Documentation</li>
+                        </ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td><img src=".\assets\images\Husam.jpg" alt="Husam's Photo"></td>
+                    <td>HUSAM WADEEA RASHED MOHAMMED</td>
+                    <td>1201302563</td>
+                    <td><strong>Group Member</strong>
+                        <br>
+                        <ol>
+                            <li>RG to NFA functionality</li>
+                            <li>Documentation</li>
+                        </ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td><img src=".\assets\images\Lee.jpg" alt="Lee's Photo"></td>
+                    <td>LEE JIA XUAN</td>
+                    <td>1201100243</td>
+                    <td><strong>Group Member</strong>
+                        <br>
+                        <ol>
+                            <li>NFA to RG functionality</li>
+                            <li>Documentation</li>
+                        </ol>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="RGtoNFAfields" style="display: none;">
+            <div class="RGtoNFAinput">
+                <div class="RGinput">
+                    <p>Regular Grammars (input)</p>
+                    <div class="inputspace">
+                        <!-- To Husam: you can write your code here!
+                            NOTE: you can edit on the style and the script too. -->
+                    </div>
+                </div>
+                <button type="submit" class="checkButton">Check</button>
+                <div class="RGinput">
+                    <p>Check strings (input)</p>
+                    <div class="inputspace">
+                        <!-- To Husam: you can write your code here!
+                            NOTE: you can edit on the style and the script too. -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="convertSeparator">
+                <button type="submit" class="convertButton">Convert RG into NFA</button>
+            </div>
+
+            <div class="RGtoNFAoutput">
+                <div class="RGformalDefinition">
+                    <!-- To Husam: you can write your code here!
+                         NOTE: you can edit on the style and the script too. -->
+                </div>
+                <div class="RGtransitionTable">
+                    <p>Transition Table</p>
+                    <div class="RGdrawTable">
+                        <!-- To Husam: you can write your code here!
+                            NOTE: you can edit on the style and the script too. -->
+                    </div>
+                </div>
+                <button type="submit" class="toNFAbutton">To NFA without &epsilon;</button>
+                <div class="RGtransitionTable">
+                    <p>Transition Table W/O &epsilon;</p>
+                    <div class="RGdrawTable">
+                        <!-- To Husam: you can write your code here!
+                            NOTE: you can edit on the style and the script too. -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="NFAdraw">
+                <button type="submit" class="drawNFAbutton">Draw NFA</button>
+                <div class="NFAdrawig">
+                    <!-- To Husam: you can write your code here!
+                        NOTE: you can edit on the style and the script too. -->
+                </div>
+            </div>
+        </div>
+
+        <div id="NFAtoRGfields" style="display: none;">
+            <div class="NFAtoRGinput">
+                <div class="NFAinput">
+                    <P>NFA (input)</P>
+                    <div class="inputNFA">
+                        <!-- To Lee: you can write your code here!
+                            NOTE: you can edit on the style and the script too. -->
+                            <table class="inputNFATable">
+                                <thead>
+                                    <tr>
+                                        <td style="width:100px; background-color: yellow"> &#x2211; </td>
+                                        <td style="width:65px"><input type="text" class="inputNFATB" placeholder="&nbsp;"></td>
+                                        <td style="width:65px"><input type="text" class="inputNFATB" placeholder="&nbsp;"></td>
+                                        <td style="width:65px"> <input type="text" readonly value="&#x2208;" class="inputNFATB"> </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="width:100px; background-color: yellow">Q</td>
+                                        <td style="width:65px"><input type="text" class="inputNFATB" placeholder="&nbsp;"></td>
+                                        <td style="width:65px"><input type="text" class="inputNFATB" placeholder="&nbsp;"></td>
+                                        <td style="width:65px"><input type="text" class="inputNFATB" placeholder="&nbsp;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:100px; background-color: yellow">START</td>
+                                        <td style="width:65px"><input type="text" class="inputNFATB" placeholder="&nbsp;"></td>
+                                        <td style="width:65px"><input type="text" class="inputNFATB" placeholder="&nbsp;"></td>
+                                        <td style="width:65px"><input type="text" class="inputNFATB" placeholder="&nbsp;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:100px; background-color: yellow">FINAL</td>
+                                        <td style="width:65px"><input type="text" class="inputNFATB" placeholder="&nbsp;"></td>
+                                        <td style="width:65px"><input type="text" class="inputNFATB" placeholder="&nbsp;"></td>
+                                        <td style="width:65px"><input type="text" class="inputNFATB" placeholder="&nbsp;"></td>
+                                    </tr>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button style="margin-top: 10px;" onclick="addColumn()">Add Column</button>
+                            <button style="margin-top: 10px;" onclick="deleteColumn()">Delete Column</button>
+                            <button style="margin-top: 10px;" onclick="handleNFACreateTransitionTable()">Create Transition Table</button>
+                    </div>
+                </div>
+                <div class="NFAtransitionTable">
+                    <p>Transition Table</p>
+                    <div class="NFAdrawTable">
+                        <!-- To Lee: you can write your code here!
+                            NOTE: you can edit on the style and the script too. -->
+                    </div>
+                </div>
+                <div class="NFAinput">
+                    <p>Check strings (input)</p>
+                    <div class="outputspaceTransitionTable" style="min-height: auto";> 
+                        <!-- To Lee: you can write your code here!
+                            NOTE: you can edit on the style and the script too. -->
+                            <textarea id="string-to-check" rows="5" spellcheck="false"></textarea>
+                            <textarea id="string-check-result" rows="5" cols="5" spellcheck="false"></textarea>
+                    </div>
+                    <div style="padding:10px">
+                        <button style class="checkButton" onclick="checkString()">Check</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="convertSeparator">
+                <button class="convertButton" onclick="convertNFAToRG()">Convert NFA into RG</button>
+            </div>
+
+            <div class="NFAtoRGoutput">
+                <div class="NFAoutput">
+                    <p>Regular Grammars</p>
+                    <div class="outputspaceRGConvert">
+                        <!-- To Lee: you can write your code here!
+                                NOTE: you can edit on the style and the script too. -->
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="NFAdraw">
+                <button type="submit" class="drawNFAbutton">Draw NFA</button>
+                <div class="NFAdrawig">
+                    <!-- To Lee: you can write your code here!
+                        NOTE: you can edit on the style and the script too. -->
+                </div>
+            </div>
+        </div>
+
+        <div id="HelpandDocFields" style="display: none;">
+            <p>How it works?
+                <br><br>To be Continued....</p>
+        </div>
+    </div>
+
+    <script>
+        function doCheckStrings(testS,transitions) {
+            var nfaInputData = getNFAInput();
+            var nfaStartState = nfaInputData.nfaStartState;
+            var nfaEndState = nfaInputData.nfaEndState;
+            var current = nfaStartState;
+            var tResult = 'OK';
+            var fResult = 'NO';
+            for (var i = 0; i < testS.length; i++){
+                var state = testS[i];
+                if (transitions[current] && transitions[current][state]) {
+                    // transition exists, go to next state
+                    current = transitions[current][state];
+                } else {
+                    // transition not exist
+                    return fResult;
+                }
+            }   
+            if (nfaEndState.includes(current.toString())) {
+                return tResult; // String is accepted
+            } else {
+                return fResult; // String is not accepted
+            }
+        }
+
+        function checkString() {
+            document.getElementById('string-to-check').innerHTML = "";
+            var textarea = document.getElementById('string-to-check');
+
+            var userInput = textarea.value;
+
+            // change the string into array
+            var listOfStringToCheck = userInput.split('\n').filter(line => line.trim() !== '');
+            var checkResult = "";
+            var nfaTransitionTable = document.querySelector('.NFAdrawTable');
+            var rows = nfaTransitionTable.querySelectorAll('tr');
+
+            // First row
+            var variableNames = Array.from(rows[0].querySelectorAll('td')).slice(1).map(cell => cell.textContent.trim());
+            var transitions = {};
+
+            // Starting from the second row
+            for (var i = 1; i < rows.length; i++) {
+                var cells = rows[i].querySelectorAll('td');
+                var state = cells[0].textContent.trim().replace(/[*>]/g, '');
+                transitions[state] = {};
+
+                // Start from second cell
+                for (var j = 1; j < cells.length; j++) {
+                    var input = variableNames[j - 1];
+                    var output = cells[j].querySelector('input').value.trim();
+
+                    // If the output is not the empty set, add it to the transitions
+                    if (output !== '\u2205') {
+                        if (!transitions[state][input]) {
+                            transitions[state][input] = [];
+                        }
+                        transitions[state][input].push(output);
+                    }
+                }
+            }
+            for (var i = 0; i < listOfStringToCheck.length; i++) {
+                checkResult += doCheckStrings(listOfStringToCheck[i],transitions) + "\n";
+             }
+            document.getElementById('string-check-result').innerHTML = checkResult;
+        }
+
+        function convertNFAToRG() {
+            var nfaTransitionTable = document.querySelector('.NFAdrawTable');
+            var rows = nfaTransitionTable.querySelectorAll('tr');
+            // First row
+            var variableNames = Array.from(rows[0].querySelectorAll('td')).slice(1).map(cell => cell.textContent.trim());
+            var transitions = {};
+
+            // Starting from the second row
+            for (var i = 1; i < rows.length; i++) {
+                var cells = rows[i].querySelectorAll('td');
+                var state = cells[0].textContent.trim();
+                transitions[state] = {};
+
+                // Iterate over the cells starting from the second cell
+                for (var j = 1; j < cells.length; j++) {
+                    var input = variableNames[j - 1];
+                    var output = cells[j].querySelector('input').value.trim();
+
+                    // If the output is not the empty set, add it to the transitions
+                    if (output !== '\u2205') {
+                        if (!transitions[state][input]) {
+                            transitions[state][input] = [];
+                        }
+                        transitions[state][input].push(output);
+                    }
+                }
+            }
+            var rg = generateRG(variableNames, transitions);
+            var rgFormalDefinition = document.querySelector('.outputspaceRGConvert');
+            rgFormalDefinition.textContent = rg;
+        }
+
+        function generateRG(variableNames, transitions) {
+            var rgString = '';
+            for (var state in transitions) {
+                // Ignore '*' and '>' 
+                var cleanState = state.replace(/[*>]/g, '');
+
+                if (rgString !== '') {
+                    rgString += '\n';
+                }
+                rgString += cleanState + ' -> ';
+                var transitionStrings = [];
+
+                for (var input in transitions[state]) {
+                    var outputStates = transitions[state][input];
+
+                    // Ignore '*' and '>' in front of the output states
+                    var cleanOutputStates = outputStates.map(output => output.replace(/[*>]/g, ''));
+
+                    // Create a string for each transition
+                    var transitionString = input + cleanOutputStates.join('');
+
+                    transitionStrings.push(transitionString);
+                }
+
+                // Combine the transition strings with '/'
+                rgString += transitionStrings.join(' / ');
+            }
+
+            return rgString;
+        }
+
+        function handleNFACreateTransitionTable() {
+            var nfaInputData = getNFAInput();
+            var nfaVariable = nfaInputData.nfaVariable;
+            var nfaStates = nfaInputData.nfaStates;
+            var nfaStartState = nfaInputData.nfaStartState;
+            var nfaEndState = nfaInputData.nfaEndState;
+            var nfaTransitionTableContainer = document.querySelector('.NFAdrawTable');
+
+            // Create a table element
+            var nfaTransitionTable = document.createElement('table');
+            var table = document.createElement('table');
+            var tbody = document.createElement('tbody');
+
+            // Create the first row 
+            var firstRow = document.createElement('tr');
+            // Add an empty cell for the first row and column
+            firstRow.appendChild(document.createElement('td'));
+
+            // Add variable names to the first row
+            for (var i = 0; i < nfaVariable.length; i++) {
+                var cell = document.createElement('td');
+				cell.setAttribute('style', 'width:65px');
+                cell.textContent = nfaVariable[i];
+                firstRow.appendChild(cell);
+            }
+            tbody.appendChild(firstRow);
+
+            // Create rows for each state
+            for (var i = 0; i < nfaStates.length; i++) {
+                var row = document.createElement('tr');
+
+                // Add state name to the first column
+                var stateCell = document.createElement('td');
+				stateCell.setAttribute('style', 'width:65px;text-align:end');
+                stateCell.textContent = nfaStates[i];
+
+                // Start state
+                if (nfaStartState === nfaStates[i]) {
+                    stateCell.textContent = '>' + stateCell.textContent;
+                }
+
+                // End state
+                if (nfaEndState.includes(nfaStates[i])) {
+                    stateCell.textContent = '*' + stateCell.textContent;
+                }
+
+                row.appendChild(stateCell);
+
+                // Add text inputs filled with 'B' for each variable
+                for (var j = 0; j < nfaVariable.length; j++) {
+                    var cell = document.createElement('td');
+					cell.setAttribute('style', 'width:65px');
+                    var input = document.createElement('input');
+                    input.type = 'text';
+					input.setAttribute('style', 'width:50px');
+                    input.value = '\u2205';
+                    cell.appendChild(input);
+                    row.appendChild(cell);
+                }
+
+                tbody.appendChild(row);
+            }
+
+            table.appendChild(tbody);
+
+            // Append the table to the container
+            nfaTransitionTableContainer.innerHTML = '';
+            nfaTransitionTableContainer.appendChild(table);
+
+        }
+
+        function getNFAInput() {
+            var nfaTable = document.querySelector('.inputNFATable');
+            // Assuming nfaRows is a NodeList containing all rows in the NFA input table
+            var nfaRows = nfaTable.querySelectorAll('tr');
+            // Assuming states and startState are arrays to store the extracted data
+            var nfaVariable = [];
+            var nfaStates = [];
+            var nfaStartState;
+            var nfaEndState = [];
+
+            // Assuming the first row contains the variable data
+            var nfaVariableRow = nfaRows[0];
+
+            nfaVariableRow.querySelectorAll('td').forEach(function (cell, columnIndex) {
+                if (columnIndex > 0) {
+                    var value = cell.querySelector('input').value.trim();
+                    if (value !== '') {
+                        nfaVariable.push(value);
+                    }
+                }
+            });
+
+            // Assuming the second row contains the states data
+            var nfaStatesRow = nfaRows[1];
+            nfaStatesRow.querySelectorAll('td').forEach(function (cell, columnIndex) {
+                if (columnIndex > 0) {
+                    var value = cell.querySelector('input').value.trim();
+                    if (value !== '') {
+                        nfaStates.push(value);
+                    }
+                }
+            });
+
+            // Assuming the third row contains the start state data
+            var nfaStartStateRow = nfaRows[2];
+            nfaStartStateRow.querySelectorAll('td').forEach(function (cell, columnIndex) {
+                if (columnIndex > 0) {
+                    var value = cell.querySelector('input').value.trim();
+                    if (value !== '') {
+                        nfaStartState = value;
+                    }
+                }
+            });
+
+            // Assuming the fourth row contains the end state data
+            var nfaEndStateRow = nfaRows[3];
+            nfaEndStateRow.querySelectorAll('td').forEach(function (cell, columnIndex) {
+                if (columnIndex > 0) {
+                    var value = cell.querySelector('input').value.trim();
+                    if (value !== '') {
+                        nfaEndState.push(value);
+                    }
+                }
+            });
+
+            return {
+                nfaVariable: nfaVariable,
+                nfaStates: nfaStates,
+                nfaStartState: nfaStartState,
+                nfaEndState: nfaEndState
+            };
+        }
+
+        function addColumn() {
+            var table = document.querySelector('.inputNFATable'); // Select the table
+            var rows = table.querySelectorAll('tr'); // Select all rows
+
+            // Add a cell before the last cell in each row
+            for (var i = 0; i < rows.length; i++) {
+                var lastCellIndex = rows[i].cells.length - 1;
+                var newCell = document.createElement("td");
+                var textBox = document.createElement("input");
+                textBox.type = "text";
+                textBox.className = "inputNFATB"; 
+                newCell.appendChild(textBox);
+                newCell.style.width = "65px";
+
+                // Insert the new cell before the last cell
+                rows[i].insertBefore(newCell, rows[i].cells[lastCellIndex]);
+            }
+         }
+         function deleteColumn() {
+            var table = document.querySelector('.inputNFATable'); // Select the table
+            var rows = table.querySelectorAll('tr'); // Select all rows
+
+            // Check if there are at least 4 columns in the table
+            if (rows.length > 0) {
+                var cellsInFirstRow = rows[0].querySelectorAll('td');
+                if (cellsInFirstRow.length < 5) {
+                    return;
+                }
+            }
+            // Remove the column before the last column in each row
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].querySelectorAll('td');
+                var columnsCount = cells.length;
+
+                // Ensure there are at least 4 columns before attempting deletion
+                if (columnsCount >= 4) {
+                    var columnToDeleteIndex = columnsCount - 2; // Index of the column before the last column
+
+                    // Remove the column before the last column
+                    rows[i].removeChild(cells[columnToDeleteIndex]);
+                } else {
+                    console.log("Cannot delete column. There must be at least 4 columns.");
+                }
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const desiredActionFields = document.getElementById("desiredActionFields");
+
+            const homeButton = document.querySelector('button[name="homeButton"]');
+            const homeFields = document.getElementById("homeFields");
+
+            const RGtoNFAbutton = document.querySelector('button[name="RGtoNFAbutton"]');
+            const RGtoNFAfields = document.getElementById("RGtoNFAfields");
+
+            const NFAtoRGbutton = document.querySelector('button[name="NFAtoRGbutton"]');
+            const NFAtoRGfields = document.getElementById("NFAtoRGfields");
+
+            const HelpandDocButton = document.querySelector('button[name="HelpandDocButton"]');
+            const HelpandDocFields = document.getElementById("HelpandDocFields");
+
+            homeButton.classList.add("clicked");
+
+            homeButton.addEventListener("click", function(event) {
+                event.preventDefault();
+                this.classList.add("clicked");
+                RGtoNFAbutton.classList.remove("clicked");
+                NFAtoRGbutton.classList.remove("clicked");
+                HelpandDocButton.classList.remove("clicked");
+                homeFields.style.display = "block";
+                RGtoNFAfields.style.display = "none";
+                NFAtoRGfields.style.display = "none";
+                HelpandDocFields.style.display = "none";
+            });
+
+            RGtoNFAbutton.addEventListener("click", function(event) {
+                event.preventDefault();
+                this.classList.add("clicked");
+                homeButton.classList.remove("clicked");
+                NFAtoRGbutton.classList.remove("clicked");
+                HelpandDocButton.classList.remove("clicked");
+                RGtoNFAfields.style.display = "block";
+                homeFields.style.display = "none";
+                NFAtoRGfields.style.display = "none";
+                HelpandDocFields.style.display = "none";
+            });
+
+            NFAtoRGbutton.addEventListener("click", function(event) {
+                event.preventDefault();
+                this.classList.add("clicked");
+                homeButton.classList.remove("clicked");
+                RGtoNFAbutton.classList.remove("clicked");
+                HelpandDocButton.classList.remove("clicked");
+                NFAtoRGfields.style.display = "block";
+                homeFields.style.display = "none";
+                RGtoNFAfields.style.display = "none";
+                HelpandDocFields.style.display = "none";
+            });
+
+            HelpandDocButton.addEventListener("click", function(event) {
+                event.preventDefault();
+                this.classList.add("clicked");
+                homeButton.classList.remove("clicked");
+                NFAtoRGbutton.classList.remove("clicked");
+                RGtoNFAbutton.classList.remove("clicked");
+                HelpandDocFields.style.display = "block";
+                homeFields.style.display = "none";
+                RGtoNFAfields.style.display = "none";
+                NFAtoRGfields.style.display = "none";
+            });
+        });
+    </script>
+
+</body>
+
+</html>
